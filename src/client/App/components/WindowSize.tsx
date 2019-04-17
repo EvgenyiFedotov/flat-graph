@@ -5,6 +5,7 @@ import Resize from './windowSize/Resize';
 interface Props {
   children?: ReactElement;
   getChildProps?: Function;
+  onResize?: Function;
 }
 
 class WindowSize extends Component<Props> {
@@ -14,7 +15,16 @@ class WindowSize extends Component<Props> {
     this.state = getSize();
   }
 
-  onResize = () => this.setState(getSize());
+  onResize = () => {
+    const { onResize } = this.props;
+    const size = getSize();
+
+    this.setState(size);
+
+    if (onResize) {
+      onResize(size);
+    }
+  };
 
   render = () => {
     const { children, getChildProps } = this.props;
