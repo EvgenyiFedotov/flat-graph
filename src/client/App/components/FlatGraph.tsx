@@ -1,24 +1,6 @@
 import React, { Component, ReactChildren, ReactElement } from 'react';
-
-interface Size {
-  width: number;
-  height: number;
-}
-
-const getSizeWindow = (): Size => ({
-  width: window.innerWidth,
-  height: window.innerHeight,
-});
-
-const setSizeElement = (element: HTMLElement, size: Size) => {
-  const { style } = element;
-  const { width, height } = size;
-
-  style.width = numToStrPx(width);
-  style.height = numToStrPx(height);
-};
-
-const numToStrPx = (value: number) => `${value}px`;
+import { setSizeElement, getSizeWindow } from './flatGraph/common';
+import ResizeWindow from './ResizeWindow';
 
 interface Props {
   children?: ReactElement;
@@ -33,9 +15,14 @@ class FlatGraph extends Component<Props> {
 
   refCanvas = (canvas: HTMLElement) => (this.canvas = canvas);
 
+  onResize = () => {
+    console.log('@onResize');
+  };
+
   render = () => {
     return (
       <div className="flat-graph">
+        <ResizeWindow onResize={this.onResize} />
         <canvas ref={this.refCanvas} />
       </div>
     );
