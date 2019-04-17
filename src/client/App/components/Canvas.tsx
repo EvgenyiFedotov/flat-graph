@@ -1,6 +1,7 @@
 import React, { Component, Children, ReactElement, Fragment, cloneElement } from 'react';
 import WindowSize from './WindowSize';
 import { sizeToStrPx } from './windowSize/common';
+import { cloneChildren } from './canvas/common';
 
 class Canvas extends Component {
   canvas: HTMLCanvasElement;
@@ -28,15 +29,9 @@ class Canvas extends Component {
         </WindowSize>
 
         {!!this.canvasContext &&
-          Children.toArray(children).reduce((result: any[], element: ReactElement) => {
-            result.push(
-              cloneElement(element, {
-                canvasContext: this.canvasContext,
-              }),
-            );
-
-            return result;
-          }, [])}
+          cloneChildren(children)(() => ({
+            canvasContext: this.canvasContext,
+          }))}
       </Fragment>
     );
   };
