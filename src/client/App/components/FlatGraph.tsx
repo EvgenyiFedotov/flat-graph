@@ -1,6 +1,5 @@
 import React, { Component, ReactElement } from 'react';
-import WindowSize from './WindowSize';
-import { sizeToStrPx } from './windowSize/common';
+import Canvas from './Canvas';
 
 interface Props {
   children?: ReactElement;
@@ -10,9 +9,7 @@ class FlatGraph extends Component<Props> {
   render = () => {
     return (
       <div className="flat-graph">
-        <WindowSize getChildProps={sizeToStrPx}>
-          <canvas />
-        </WindowSize>
+        <Canvas />
       </div>
     );
   };
