@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import WindowSize from './WindowSize';
 import { sizeToStrPx, getSize } from './windowSize/common';
 import { cloneChildren } from './canvas/common';
+import MouseEvents from './canvas/MouseEvents';
 
 interface Props {}
 
@@ -54,7 +55,9 @@ class Canvas extends Component<Props, State> {
     return (
       <Fragment>
         <WindowSize getChildProps={sizeToStrPx} onResize={this.onResize}>
-          <canvas ref={this.ref} />
+          <MouseEvents>
+            <canvas ref={this.ref} />
+          </MouseEvents>
         </WindowSize>
 
         {!!this.canvasContext &&
