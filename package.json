@@ -2,9 +2,16 @@
   "name": "flat-graph",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "client:build": "webpack --config ./webpack/client.js",
+    "client:build:watch": "webpack --config ./webpack/client.js --watch",
+    "client:build:prod": "webpack --prod",
+    "client:start": "webpack-dev-server --config ./webpack/client.js",
+    "client-service:build:watch": "webpack --config ./webpack/client-service.js --watch",
+    "client-service:start": "node ./node_modules/nodemon/bin/nodemon.js ./dist/client/service.js",
+    "build:server": "webpack --config ./webpack/server.js",
+    "build:server:watch": "webpack --config ./webpack/server.js --watch",
+    "start:server": "node ./node_modules/nodemon/bin/nodemon.js ./dist/server/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,5 +22,48 @@
   "bugs": {
     "url": "https://github.com/EvgenyiFedotov/flat-graph/issues"
   },
-  "homepage": "https://github.com/EvgenyiFedotov/flat-graph#readme"
+  "homepage": "https://github.com/EvgenyiFedotov/flat-graph#readme",
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.4.0",
+    "@babel/preset-env": "^7.3.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/express": "^4.16.1",
+    "@types/node": "^11.12.2",
+    "@types/react": "^16.8.10",
+    "@types/react-dom": "^16.8.3",
+    "@types/react-router": "^4.4.5",
+    "@types/react-router-dom": "^4.3.1",
+    "babel-eslint": "^10.0.1",
+    "babel-loader": "^8.0.5",
+    "copy-webpack-plugin": "^5.0.0",
+    "css-loader": "^2.1.1",
+    "eslint": "^5.15.2",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-flowtype": "^3.4.2",
+    "eslint-plugin-import": "^2.16.0",
+    "nodemon": "^1.18.10",
+    "style-loader": "^0.23.1",
+    "uglifyjs-webpack-plugin": "^2.1.2",
+    "uuid": "^3.3.2",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.1"
+  },
+  "dependencies": {
+    "axios": "^0.18.0",
+    "classnames": "^2.2.6",
+    "express": "^4.16.4",
+    "idb": "^4.0.0",
+    "install": "^0.12.2",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-router": "^5.0.0",
+    "react-router-dom": "^5.0.0",
+    "tweetnacl": "^1.0.1",
+    "tweetnacl-util": "^0.15.0"
+  }
 }
