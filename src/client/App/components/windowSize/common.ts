@@ -3,9 +3,14 @@ export interface Size {
   height: number;
 }
 
-export const getSizeWindow = (): Size => ({
+export const getSize = (): Size => ({
   width: window.innerWidth,
   height: window.innerHeight,
+});
+
+export const sizeToStrPx = ({ width, height }: Size) => ({
+  width: numToStrPx(width),
+  height: numToStrPx(height),
 });
 
 export const setSizeElement = (element: HTMLElement, size: Size) => {
@@ -19,7 +24,8 @@ export const setSizeElement = (element: HTMLElement, size: Size) => {
 export const numToStrPx = (value: number) => `${value}px`;
 
 export default {
-  getSizeWindow,
+  getSize,
+  sizeToStrPx,
   setSizeElement,
   numToStrPx,
 };

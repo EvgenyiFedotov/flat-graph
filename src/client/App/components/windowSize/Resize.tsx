@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import { Component } from 'react';
 
 interface Props {
-  onResize: Function;
+  children: Function;
 }
 
-class ResizeWindow extends Component<Props> {
+class Resize extends Component<Props> {
   componentDidMount() {
     window.addEventListener('resize', this.onResize);
   }
@@ -13,13 +13,13 @@ class ResizeWindow extends Component<Props> {
     window.removeEventListener('resize', this.onResize);
   }
 
-  onResize = (...args) => {
-    const { onResize } = this.props;
+  onResize = (...args: Array<any>) => {
+    const { children } = this.props;
 
-    onResize(args);
+    children(...args);
   };
 
   render = () => null;
 }
 
-export default ResizeWindow;
+export default Resize;

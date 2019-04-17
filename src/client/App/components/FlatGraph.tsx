@@ -1,29 +1,18 @@
-import React, { Component, ReactChildren, ReactElement } from 'react';
-import { setSizeElement, getSizeWindow } from './flatGraph/common';
-import ResizeWindow from './ResizeWindow';
+import React, { Component, ReactElement } from 'react';
+import WindowSize from './WindowSize';
+import { sizeToStrPx } from './windowSize/common';
 
 interface Props {
   children?: ReactElement;
 }
 
 class FlatGraph extends Component<Props> {
-  canvas: HTMLElement = null;
-
-  componentDidMount() {
-    setSizeElement(this.canvas, getSizeWindow());
-  }
-
-  refCanvas = (canvas: HTMLElement) => (this.canvas = canvas);
-
-  onResize = () => {
-    console.log('@onResize');
-  };
-
   render = () => {
     return (
       <div className="flat-graph">
-        <ResizeWindow onResize={this.onResize} />
-        <canvas ref={this.refCanvas} />
+        <WindowSize getChildProps={sizeToStrPx}>
+          <canvas />
+        </WindowSize>
       </div>
     );
   };
