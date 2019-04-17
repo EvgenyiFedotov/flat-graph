@@ -10,44 +10,94 @@ interface Props {
 
 interface PointConfig {
   position: Position;
+  color: string;
+  value: boolean;
+  radius: number;
 }
 
-const points: PointConfig[] = [
+const getColor = (value: boolean = false) => (value ? 'rebeccapurple' : 'darkorange');
+
+const getRadius = (value: boolean = false) => (value ? 20 : 10);
+
+const defPoints: PointConfig[] = [
   {
     position: [50, 50],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [100, 50],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [150, 50],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [50, 100],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [100, 100],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [150, 100],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [50, 150],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [100, 150],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
   {
     position: [150, 150],
+    color: getColor(),
+    value: false,
+    radius: getRadius(),
   },
 ];
 
 class FlatGraph extends Component<Props> {
+  state = {
+    points: defPoints,
+  };
+
   onClick = (index: number) => () => {
-    console.log(index);
+    const { points } = this.state;
+    const point = { ...points[index] };
+    const newPoints = [...points];
+
+    point.value = !point.value;
+    point.color = getColor(point.value);
+    point.radius = getRadius(point.value);
+
+    newPoints[index] = point;
+
+    this.setState({ points: newPoints });
   };
 
   render = () => {
+    const { points } = this.state;
+
     return (
       <div className="flat-graph">
         <Canvas>
@@ -55,13 +105,7 @@ class FlatGraph extends Component<Props> {
             {points.reduce(
               (res: any[], point, index) => [
                 ...res,
-                <Point
-                  color="orange"
-                  key={index}
-                  radius={10}
-                  position={point.position}
-                  onClick={this.onClick(index)}
-                />,
+                <Point {...point} key={index} onClick={this.onClick(index)} />,
               ],
               [],
             )}

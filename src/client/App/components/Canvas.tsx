@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import WindowSize from './WindowSize';
-import { sizeToStrPx } from './windowSize/common';
+import { sizeToStrPx, getSize } from './windowSize/common';
 import { cloneChildren } from './canvas/common';
 
 interface Props {}
@@ -30,6 +30,12 @@ class Canvas extends Component<Props, State> {
 
   componentWillUnmount() {
     this.canvas.removeEventListener('click', this.eventCallback);
+  }
+
+  componentWillUpdate() {
+    const { width, height } = getSize();
+
+    this.canvasContext.clearRect(0, 0, width, height);
   }
 
   ref = (canvas: HTMLCanvasElement) => {

@@ -24,9 +24,7 @@ class Point extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.isChangePropsDraw(prevProps)) {
-      this.draw();
-    }
+    this.draw();
 
     this.changeEvent(prevProps);
   }
