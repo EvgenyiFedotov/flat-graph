@@ -4,7 +4,7 @@ import { cloneChildren, Cursor } from './common';
 interface Props {
   canvasContext?: CanvasRenderingContext2D;
   children: ReactElement | ReactElement[];
-  cursor?: Cursor;
+  event?: MouseEvent;
 }
 
 class Layers extends Component<Props> {
@@ -27,12 +27,12 @@ class Layers extends Component<Props> {
   refLayer = (index: number) => (layer: ReactElement) => (this.layers[index] = layer);
 
   render = () => {
-    const { children, canvasContext, cursor } = this.props;
+    const { children, canvasContext, event } = this.props;
 
     return cloneChildren(children)((el: ReactElement, index: number) => ({
       ref: this.refLayer(index),
       canvasContext,
-      cursor,
+      event,
     }));
   };
 }

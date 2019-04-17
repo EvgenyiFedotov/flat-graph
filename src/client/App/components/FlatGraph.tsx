@@ -8,20 +8,42 @@ interface Props {
   children?: ReactElement;
 }
 
-const points: Position[] = [
-  [50, 50],
-  [100, 50],
-  [150, 50],
-  [50, 100],
-  [100, 100],
-  [150, 100],
-  [50, 150],
-  [100, 150],
-  [150, 150],
+interface PointConfig {
+  position: Position;
+}
+
+const points: PointConfig[] = [
+  {
+    position: [50, 50],
+  },
+  {
+    position: [100, 50],
+  },
+  {
+    position: [150, 50],
+  },
+  {
+    position: [50, 100],
+  },
+  {
+    position: [100, 100],
+  },
+  {
+    position: [150, 100],
+  },
+  {
+    position: [50, 150],
+  },
+  {
+    position: [100, 150],
+  },
+  {
+    position: [150, 150],
+  },
 ];
 
 class FlatGraph extends Component<Props> {
-  onMousemove = (index: number) => () => {
+  onClick = (index: number) => () => {
     console.log(index);
   };
 
@@ -31,14 +53,14 @@ class FlatGraph extends Component<Props> {
         <Canvas>
           <Layers>
             {points.reduce(
-              (res: any[], position, index) => [
+              (res: any[], point, index) => [
                 ...res,
                 <Point
                   color="orange"
                   key={index}
-                  onMousemove={this.onMousemove(index)}
                   radius={10}
-                  position={position}
+                  position={point.position}
+                  onClick={this.onClick(index)}
                 />,
               ],
               [],

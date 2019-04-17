@@ -7,8 +7,8 @@ interface Props {
   radius: number;
   color: string;
   angle: [number, number];
-  cursor?: Cursor;
-  onMousemove?: Function;
+  event?: MouseEvent;
+  onClick?: Function;
 }
 
 class Point extends Component<Props> {
@@ -28,7 +28,7 @@ class Point extends Component<Props> {
       this.draw();
     }
 
-    this.onMousemove(prevProps);
+    this.changeEvent(prevProps);
   }
 
   isChangePropsDraw(prevProps: Props): boolean {
@@ -48,12 +48,32 @@ class Point extends Component<Props> {
     return false;
   }
 
-  onMousemove = (prevProps: Props) => {
-    const { cursor, onMousemove } = this.props;
-    const isInside = Point.isInside(this.props)(cursor);
+  changeEvent(prevProps: Props) {
+    const { event } = this.props;
 
-    if (prevProps.cursor !== cursor && isInside && onMousemove) {
-      onMousemove(cursor);
+    if (prevProps.event !== event) {
+      const { offsetX, offsetY } = event;
+      const isInside = Point.isInside(this.props)([offsetX, offsetY]);
+
+      if (isInside) {
+        const { type } = event;
+
+        switch (type) {
+          case 'click':
+            this.onClick(event);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  onClick = (event: MouseEvent) => {
+    const { onClick } = this.props;
+
+    if (onClick) {
+      onClick(this, event);
     }
   };
 

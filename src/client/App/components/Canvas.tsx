@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import WindowSize from './WindowSize';
 import { sizeToStrPx } from './windowSize/common';
-import { cloneChildren, Cursor } from './canvas/common';
+import { cloneChildren } from './canvas/common';
 
 interface Props {}
 
 interface State {
-  cursor?: Cursor;
+  event?: MouseEvent;
 }
 
 class Canvas extends Component<Props, State> {
@@ -18,18 +18,18 @@ class Canvas extends Component<Props, State> {
     super(props);
 
     this.state = {
-      cursor: null,
+      event: null,
     };
   }
 
   componentDidMount() {
     this.forceUpdate();
 
-    this.canvas.addEventListener('mousemove', this.onMousemove);
+    this.canvas.addEventListener('click', this.eventCallback);
   }
 
   componentWillUnmount() {
-    this.canvas.removeEventListener('mousemove', this.onMousemove);
+    this.canvas.removeEventListener('click', this.eventCallback);
   }
 
   ref = (canvas: HTMLCanvasElement) => {
@@ -39,17 +39,11 @@ class Canvas extends Component<Props, State> {
 
   onResize = () => this.forceUpdate();
 
-  onMousemove = (e: MouseEvent) => {
-    const { offsetX, offsetY } = e;
-
-    this.setState({
-      cursor: [offsetX, offsetY],
-    });
-  };
+  eventCallback = (event: MouseEvent) => this.setState({ event });
 
   render = () => {
     const { children } = this.props;
-    const { cursor } = this.state;
+    const { event } = this.state;
 
     return (
       <Fragment>
@@ -60,7 +54,7 @@ class Canvas extends Component<Props, State> {
         {!!this.canvasContext &&
           cloneChildren(children)(() => ({
             canvasContext: this.canvasContext,
-            cursor,
+            event,
           }))}
       </Fragment>
     );
