@@ -1,9 +1,10 @@
 import { Component, ReactElement } from 'react';
-import { cloneChildren } from './common';
+import { cloneChildren, Cursor } from './common';
 
 interface Props {
   canvasContext?: CanvasRenderingContext2D;
   children: ReactElement | ReactElement[];
+  cursor?: Cursor;
 }
 
 class Layers extends Component<Props> {
@@ -16,21 +17,22 @@ class Layers extends Component<Props> {
   }
 
   componentDidMount() {
-    console.log(this.layers);
+    // console.log(this.props.cursor);
   }
 
   componentDidUpdate() {
-    console.log(this.layers);
+    // console.log(this.props.cursor);
   }
 
   refLayer = (index: number) => (layer: ReactElement) => (this.layers[index] = layer);
 
   render = () => {
-    const { children, canvasContext } = this.props;
+    const { children, canvasContext, cursor } = this.props;
 
     return cloneChildren(children)((el: ReactElement, index: number) => ({
-      canvasContext,
       ref: this.refLayer(index),
+      canvasContext,
+      cursor,
     }));
   };
 }
