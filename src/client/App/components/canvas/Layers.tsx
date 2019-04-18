@@ -4,7 +4,7 @@ import { StateMouseEvent } from './MouseEvents';
 
 interface Props {
   canvasContext?: CanvasRenderingContext2D;
-  children: ReactElement | ReactElement[];
+  children: any;
   stateEvent?: StateMouseEvent;
 }
 

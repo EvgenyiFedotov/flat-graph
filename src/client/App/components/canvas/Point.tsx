@@ -1,4 +1,4 @@
-import { Component, SyntheticEvent } from 'react';
+import { Component } from 'react';
 import { Position, Cursor } from './common';
 import { StateMouseEvent } from './MouseEvents';
 

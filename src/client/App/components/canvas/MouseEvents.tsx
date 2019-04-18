@@ -1,6 +1,7 @@
 import React, {
   Component, ReactElement, cloneElement, SyntheticEvent,
 } from 'react';
+import { Offset } from './common';
 
 export interface MouseEventsHandlers {
   onMouseDown?: Function;
@@ -12,8 +13,6 @@ export interface MouseEventsHandlers {
 interface Props extends MouseEventsHandlers {
   children: ReactElement;
 }
-
-export type Offset = [number, number];
 
 export interface StateMouseEvent {
   offset: Offset;
@@ -70,8 +69,10 @@ class MouseEvents extends Component<Props> {
   };
 
   onMouseMove = (e: SyntheticEvent) => {
-    if (this.stateMouseDown !== null && this.stateMouseUp === null) {
-      console.log(this.stateMouseDown);
+    const { onMouseMove } = this.props;
+
+    if (onMouseMove && this.stateMouseDown !== null && this.stateMouseUp === null) {
+      onMouseMove(MouseEvents.buildStateMouseEvent(e));
     }
   };
 

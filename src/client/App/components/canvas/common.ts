@@ -4,6 +4,10 @@ export type Position = [number, number];
 
 export type Cursor = Position;
 
+export type Point = Position;
+
+export type Offset = Position;
+
 export const cloneChildren = (children: any) => (getPropsChild: Function = () => null) => Children.toArray(children).reduce((result: any[], element: ReactElement, index: number) => {
   result.push(cloneElement(element, getPropsChild(element, index)));
 

@@ -3,6 +3,7 @@ import Canvas from './Canvas';
 import Point from './canvas/Point';
 import Layers from './canvas/Layers';
 import { Position } from './canvas/common';
+import Line from './canvas/Line';
 
 interface Props {
   children?: ReactElement;
@@ -102,6 +103,11 @@ class FlatGraph extends Component<Props> {
       <div className="flat-graph">
         <Canvas>
           <Layers>
+            <Line points={[[50, 50], [100, 100]]} />
+            <Line points={[[150, 50], [100, 100]]} />
+            <Line points={[[50, 150], [100, 100]]} />
+            <Line points={[[150, 150], [100, 100]]} />
+
             {points.reduce(
               (res: any[], point, index) => [
                 ...res,
