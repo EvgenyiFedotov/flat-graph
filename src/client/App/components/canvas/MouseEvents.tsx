@@ -7,6 +7,7 @@ interface Props {
   onMouseDown?: Function;
   onMouseUp?: Function;
   onClick?: Function;
+  onMouseMove?: Function;
 }
 
 export type Offset = [number, number];
@@ -16,9 +17,9 @@ export interface StateMouseEvent {
 }
 
 class MouseEvents extends Component<Props> {
-  mouseDownOffset: Offset;
+  stateMouseDown: StateMouseEvent;
 
-  mouseUpOffset: Offset;
+  stateMouseUp: StateMouseEvent;
 
   constructor(props: Props) {
     super(props);
@@ -27,41 +28,47 @@ class MouseEvents extends Component<Props> {
   }
 
   resetEvents = () => {
-    this.mouseDownOffset = null;
-    this.mouseUpOffset = null;
+    this.stateMouseDown = null;
+    this.stateMouseUp = null;
   };
 
   onMouseDown = (e: SyntheticEvent) => {
     this.resetEvents();
 
-    this.mouseDownOffset = MouseEvents.getOffsetEvent(e);
+    this.stateMouseDown = MouseEvents.buildStateMouseEvent(e);
 
     const { onMouseDown } = this.props;
 
     if (onMouseDown) {
-      onMouseDown(MouseEvents.buildStateMouseEvent(e));
+      onMouseDown({ ...this.stateMouseDown });
     }
   };
 
   onMouseUp = (e: SyntheticEvent) => {
-    this.mouseUpOffset = MouseEvents.getOffsetEvent(e);
+    this.stateMouseUp = MouseEvents.buildStateMouseEvent(e);
 
     const { onMouseUp } = this.props;
 
     if (onMouseUp) {
-      onMouseUp(MouseEvents.buildStateMouseEvent(e));
+      onMouseUp({ ...this.stateMouseUp });
     }
   };
 
   onClick = (e: SyntheticEvent) => {
     const { onClick } = this.props;
 
-    if (this.mouseDownOffset && this.mouseUpOffset && onClick) {
-      const isClick = MouseEvents.isClick(this.mouseDownOffset, this.mouseUpOffset);
+    if (this.stateMouseDown && this.stateMouseUp && onClick) {
+      const isClick = MouseEvents.isClick(this.stateMouseDown, this.stateMouseUp);
 
       if (isClick) {
         onClick(MouseEvents.buildStateMouseEvent(e));
       }
+    }
+  };
+
+  onMouseMove = (e: SyntheticEvent) => {
+    if (this.stateMouseDown !== null && this.stateMouseUp === null) {
+      console.log(this.stateMouseDown);
     }
   };
 
@@ -73,6 +80,7 @@ class MouseEvents extends Component<Props> {
       onMouseDown: this.onMouseDown,
       onMouseUp: this.onMouseUp,
       onClick: this.onClick,
+      onMouseMove: this.onMouseMove,
     });
   };
 
@@ -85,8 +93,11 @@ class MouseEvents extends Component<Props> {
 
   static comparisonOffset = (offset1: Offset, offset2: Offset) => (indexValue: number): Boolean => offset1[indexValue] === offset2[indexValue];
 
-  static isClick = (mouseDownOffset: Offset, mouseUpOffset: Offset) => {
-    const comparisonOffset = MouseEvents.comparisonOffset(mouseDownOffset, mouseUpOffset);
+  static isClick = (stateMouseDown: StateMouseEvent, stateMouseUp: StateMouseEvent) => {
+    const comparisonOffset = MouseEvents.comparisonOffset(
+      stateMouseDown.offset,
+      stateMouseUp.offset,
+    );
 
     return comparisonOffset(0) && comparisonOffset(1);
   };
