@@ -18,95 +18,75 @@ interface PointConfig {
 
 const getColor = (value: boolean = false) => (value ? 'rebeccapurple' : 'darkorange');
 
-const getRadius = (value: boolean = false) => (value ? 20 : 10);
+const getRadius = (value: boolean = false) => (value ? 15 : 10);
+
+const createPointConfig = (position: Position = [0, 0]) => (
+  value: boolean = false,
+): PointConfig => ({
+  radius: getRadius(value),
+  color: getColor(value),
+  value,
+  position,
+});
 
 const defPoints: PointConfig[] = [
-  {
-    position: [50, 50],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [100, 50],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [150, 50],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [50, 100],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [100, 100],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [150, 100],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [50, 150],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [100, 150],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
-  {
-    position: [150, 150],
-    color: getColor(),
-    value: false,
-    radius: getRadius(),
-  },
+  createPointConfig([50, 50])(true),
+  createPointConfig([100, 50])(),
+  createPointConfig([150, 50])(true),
+  createPointConfig([50, 100])(),
+  createPointConfig([100, 100])(true),
+  createPointConfig([150, 100])(),
+  createPointConfig([50, 150])(true),
+  createPointConfig([100, 150])(),
+  createPointConfig([150, 150])(true),
+];
+
+type Points = [Position, Position];
+
+interface LineConfig {
+  points: Points;
+  color: string;
+}
+
+const createLineConfig = (points: Points = [[0, 0], [0, 0]]): LineConfig => ({
+  color: 'rebeccapurple',
+  points,
+});
+
+const defLines: LineConfig[] = [
+  createLineConfig([[50, 50], [100, 100]]),
+  createLineConfig([[150, 50], [100, 100]]),
+  createLineConfig([[50, 150], [100, 100]]),
+  createLineConfig([[150, 150], [100, 100]]),
 ];
 
 class FlatGraph extends Component<Props> {
   state = {
     points: defPoints,
+    lines: defLines,
   };
 
   onClick = (index: number) => () => {
     const { points } = this.state;
-    const point = { ...points[index] };
     const newPoints = [...points];
+    const point = points[index];
 
-    point.value = !point.value;
-    point.color = getColor(point.value);
-    point.radius = getRadius(point.value);
-
-    newPoints[index] = point;
+    newPoints[index] = createPointConfig(point.position)(!point.value);
 
     this.setState({ points: newPoints });
   };
 
   render = () => {
-    const { points } = this.state;
+    const { lines, points } = this.state;
 
     return (
       <div className="flat-graph">
         <Canvas>
           <Layers>
-            <Line points={[[50, 50], [100, 100]]} />
-            <Line points={[[150, 50], [100, 100]]} />
-            <Line points={[[50, 150], [100, 100]]} />
-            <Line points={[[150, 150], [100, 100]]} />
+            {lines.reduce(
+              (res: any[], line, index) => [...res, <Line {...line} key={index} />],
+              [],
+            )}
 
             {points.reduce(
               (res: any[], point, index) => [
