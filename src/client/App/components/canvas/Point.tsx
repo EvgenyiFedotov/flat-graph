@@ -1,5 +1,6 @@
-import { Component } from 'react';
+import { Component, SyntheticEvent } from 'react';
 import { Position, Cursor } from './common';
+import { StateMouseEvent } from './MouseEvents';
 
 interface Props {
   canvasContext?: CanvasRenderingContext2D;
@@ -7,7 +8,7 @@ interface Props {
   radius: number;
   color: string;
   angle: [number, number];
-  event?: MouseEvent;
+  stateEvent?: StateMouseEvent;
   onClick?: Function;
 }
 
@@ -47,18 +48,18 @@ class Point extends Component<Props> {
   }
 
   changeEvent(prevProps: Props) {
-    const { event } = this.props;
+    const { stateEvent } = this.props;
 
-    if (prevProps.event !== event) {
-      const { offsetX, offsetY } = event;
-      const isInside = Point.isInside(this.props)([offsetX, offsetY]);
+    if (prevProps.stateEvent !== stateEvent) {
+      const { offset } = stateEvent;
+      const isInside = Point.isInside(this.props)(offset);
 
       if (isInside) {
         const { type } = event;
 
         switch (type) {
           case 'click':
-            this.onClick(event);
+            this.onClick(stateEvent);
             break;
           default:
             break;
@@ -67,7 +68,7 @@ class Point extends Component<Props> {
     }
   }
 
-  onClick = (event: MouseEvent) => {
+  onClick = (event: StateMouseEvent) => {
     const { onClick } = this.props;
 
     if (onClick) {

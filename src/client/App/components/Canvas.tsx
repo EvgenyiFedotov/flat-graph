@@ -2,12 +2,12 @@ import React, { Component, Fragment } from 'react';
 import WindowSize from './WindowSize';
 import { sizeToStrPx, getSize } from './windowSize/common';
 import { cloneChildren } from './canvas/common';
-import MouseEvents from './canvas/MouseEvents';
+import MouseEvents, { StateMouseEvent } from './canvas/MouseEvents';
 
 interface Props {}
 
 interface State {
-  event?: MouseEvent;
+  stateEvent?: StateMouseEvent;
 }
 
 class Canvas extends Component<Props, State> {
@@ -19,18 +19,12 @@ class Canvas extends Component<Props, State> {
     super(props);
 
     this.state = {
-      event: null,
+      stateEvent: null,
     };
   }
 
   componentDidMount() {
     this.forceUpdate();
-
-    this.canvas.addEventListener('click', this.eventCallback);
-  }
-
-  componentWillUnmount() {
-    this.canvas.removeEventListener('click', this.eventCallback);
   }
 
   componentWillUpdate() {
@@ -46,16 +40,16 @@ class Canvas extends Component<Props, State> {
 
   onResize = () => this.forceUpdate();
 
-  eventCallback = (event: MouseEvent) => this.setState({ event });
+  eventCallback = (stateEvent: StateMouseEvent) => this.setState({ stateEvent });
 
   render = () => {
     const { children } = this.props;
-    const { event } = this.state;
+    const { stateEvent } = this.state;
 
     return (
       <Fragment>
         <WindowSize getChildProps={sizeToStrPx} onResize={this.onResize}>
-          <MouseEvents>
+          <MouseEvents onClick={this.eventCallback}>
             <canvas ref={this.ref} />
           </MouseEvents>
         </WindowSize>
@@ -63,7 +57,7 @@ class Canvas extends Component<Props, State> {
         {!!this.canvasContext &&
           cloneChildren(children)(() => ({
             canvasContext: this.canvasContext,
-            event,
+            stateEvent,
           }))}
       </Fragment>
     );

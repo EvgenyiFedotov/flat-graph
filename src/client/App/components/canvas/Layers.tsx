@@ -1,10 +1,11 @@
 import { Component, ReactElement } from 'react';
-import { cloneChildren, Cursor } from './common';
+import { cloneChildren } from './common';
+import { StateMouseEvent } from './MouseEvents';
 
 interface Props {
   canvasContext?: CanvasRenderingContext2D;
   children: ReactElement | ReactElement[];
-  event?: MouseEvent;
+  stateEvent?: StateMouseEvent;
 }
 
 class Layers extends Component<Props> {
@@ -27,12 +28,12 @@ class Layers extends Component<Props> {
   refLayer = (index: number) => (layer: ReactElement) => (this.layers[index] = layer);
 
   render = () => {
-    const { children, canvasContext, event } = this.props;
+    const { children, canvasContext, stateEvent } = this.props;
 
     return cloneChildren(children)((el: ReactElement, index: number) => ({
       ref: this.refLayer(index),
       canvasContext,
-      event,
+      stateEvent,
     }));
   };
 }
