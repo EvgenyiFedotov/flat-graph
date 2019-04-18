@@ -2,12 +2,15 @@ import React, {
   Component, ReactElement, cloneElement, SyntheticEvent,
 } from 'react';
 
-interface Props {
-  children: ReactElement;
+export interface MouseEventsHandlers {
   onMouseDown?: Function;
   onMouseUp?: Function;
   onClick?: Function;
   onMouseMove?: Function;
+}
+
+interface Props extends MouseEventsHandlers {
+  children: ReactElement;
 }
 
 export type Offset = [number, number];
