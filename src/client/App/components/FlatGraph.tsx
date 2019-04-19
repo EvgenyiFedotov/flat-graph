@@ -49,15 +49,31 @@ const createPointConfig = (position: Position = [0, 0]) => (
   position,
 });
 
+const togglePointValue = (point: PointConfig) => {
+  const { value } = point;
+
+  if (value === PointValue.active) {
+    const { clone } = point;
+
+    return clone(PointValue.enabled);
+  } else if (value === PointValue.enabled) {
+    const { clone } = point;
+
+    return clone(PointValue.active);
+  }
+
+  return point;
+};
+
 const defPoints: PointConfig[] = [
   createPointConfig([50, 50])(PointValue.active),
-  createPointConfig([100, 50])(),
+  createPointConfig([100, 50])(PointValue.disabled),
   createPointConfig([150, 50])(PointValue.active),
-  createPointConfig([50, 100])(),
+  createPointConfig([50, 100])(PointValue.disabled),
   createPointConfig([100, 100])(PointValue.active),
-  createPointConfig([150, 100])(),
+  createPointConfig([150, 100])(PointValue.disabled),
   createPointConfig([50, 150])(PointValue.active),
-  createPointConfig([100, 150])(),
+  createPointConfig([100, 150])(PointValue.disabled),
   createPointConfig([150, 150])(PointValue.active),
 ];
 
@@ -95,7 +111,7 @@ class FlatGraph extends Component<Props> {
     const newPoints = [...points];
     const point = points[index];
 
-    newPoints[index] = createPointConfig(point.position)();
+    newPoints[index] = togglePointValue(point);
 
     this.setState({ points: newPoints });
   };
